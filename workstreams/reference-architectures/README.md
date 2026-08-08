@@ -28,17 +28,31 @@ Use cases and scenarios validate the architectures; they are not separate refere
 
 ## Structure
 
+[`ra/`](ra/README.md) is normative — it is the reference architecture. [`docs/`](docs/README.md) is supporting analysis that informs the architecture without being it. `decisions/` records choices the WG needs to remember.
+
 ```text
 workstreams/reference-architectures/
 ├── README.md
-├── ra/
-│   ├── ra-single-agent.md
-│   └── ra-multi-agent.md
+├── ra/                          normative
+│   ├── README.md                how to read the RA set
+│   ├── ra-single-agent.md       entry point: single-agent workflow
+│   ├── ra-multi-agent.md        entry point: multi-agent workflow
+│   ├── primitives/              one file per primitive, P1–P19
+│   ├── contracts/               agent-step boundary, handoff
+│   ├── topologies/              T1–T6 multi-agent shapes
+│   └── guidance/                checklists, determinism hints, loop tiers,
+│                                anti-patterns, invariants, failure modes,
+│                                WG boundaries, references
 ├── decisions/
 │   └── TEMPLATE.md
-└── docs/
-    └── *.md
+└── docs/                        supporting, non-normative
+    ├── README.md
+    ├── landscape/               industry survey by system family
+    └── *.md                     why-now, gaps, counter-arguments,
+                                 charter mapping, reconciliation log
 ```
+
+Each primitive, contract, topology, and guidance concern lives in its own file so that a disagreement about one is a review thread about one file, which suits the async, converge-in-PR-comments working style below. The two `ra-*.md` documents are entry points: they carry their own argument and link out rather than restating what is defined elsewhere.
 
 ## How to read the architectures
 
