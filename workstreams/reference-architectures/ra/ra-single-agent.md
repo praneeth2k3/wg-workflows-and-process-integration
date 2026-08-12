@@ -14,25 +14,25 @@ Normative language throughout is RFC 2119, per BCP 14. Facts marked `> **[verify
 
 The single-agent workflow RA answers one question: **what must exist around a non-deterministic agent step so that the workflow as a whole remains reliable, resumable, and auditable?**
 
-The core architectural claim: **the workflow owns the process; the agent is a bounded, contracted step inside it.** This RA specifies the boundary — the contract between the deterministic workflow and the non-deterministic step — not the agent itself.
+The core architectural claim: **the workflow owns the process; the agent is a bounded, contracted step inside it.** This RA specifies the boundary (the contract between the deterministic workflow and the non-deterministic step), not the agent itself.
 
 This RA IS:
 
-- A checklist a practitioner walks a use case through to decide whether an agent step is warranted at all, and if so, how to bound it — see [`guidance/checklist-single-agent.md`](guidance/checklist-single-agent.md).
-- A shared vocabulary — the primitive set `P1`–`P15` — so that "agent step," "tool call," and "human checkpoint" mean the same thing whether the implementation is a BPMN engine, a workflow-as-code platform, or an agent framework.
-- A statement of the eight elements every `AgentStep` MUST declare before it is fit to run in production — see [`contracts/agent-step-boundary.md`](contracts/agent-step-boundary.md).
+- A checklist a practitioner walks a use case through to decide whether an agent step is warranted at all, and if so, how to bound it: see [`guidance/checklist-single-agent.md`](guidance/checklist-single-agent.md).
+- A shared vocabulary (the primitive set `P1`–`P15`) so that "agent step," "tool call," and "human checkpoint" mean the same thing whether the implementation is a BPMN engine, a workflow-as-code platform, or an agent framework.
+- A statement of the eight elements every `AgentStep` MUST declare before it is fit to run in production: see [`contracts/agent-step-boundary.md`](contracts/agent-step-boundary.md).
 
 This RA IS NOT:
 
 - **Not a framework.** It prescribes no engine, language, or runtime.
 - **Not an agent design guide.** ReAct, plan-and-execute, reflection, and other internal reasoning loops are equally valid implementation choices *inside* the `AgentStep` boundary. This document is silent on which to use, deliberately, and does not revisit the point again.
-- **Not a spec — yet.** It is a draft for WG review. Whether it becomes a conformance profile with a test suite is an open question, not a commitment.
+- **Not a spec yet.** It is a draft for WG review. Whether it becomes a conformance profile with a test suite is an open question, not a commitment.
 
 ## Structure
 
 ### Primitives
 
-The primitive set below is normative and shared with [`ra-multi-agent.md`](ra-multi-agent.md); IDs `P1`–`P15` MUST NOT be redefined between the two documents. Full definitions, prior-art mappings, and the relationships between primitives live one per file in [`primitives/`](primitives/README.md) — this table is an index, not a restatement.
+The primitive set below is normative and shared with [`ra-multi-agent.md`](ra-multi-agent.md); IDs `P1`–`P15` MUST NOT be redefined between the two documents. Full definitions, prior-art mappings, and the relationships between primitives live one per file in [`primitives/`](primitives/README.md). This table is an index, not a restatement.
 
 | ID | Primitive | Obligation | Defined in |
 |----|-----------|-------------|--------------|
@@ -55,11 +55,11 @@ The primitive set below is normative and shared with [`ra-multi-agent.md`](ra-mu
 
 ### The AgentStep boundary contract
 
-`P4 AgentStep` is this RA's central object. The eight elements every `AgentStep` MUST declare before it is fit to run in production — goal specification, input contract, output contract, tool scope, budget, termination conditions, identity and delegated authority, and observability contract — are specified in full in [`contracts/agent-step-boundary.md`](contracts/agent-step-boundary.md), including the reference structure diagrams showing where the enforcement points sit relative to the agent boundary. The BPMN ad-hoc sub-process precedent for hosting `P4` inside an existing standard, and the argument that four independently-built engines converged on the same shape, are covered in [`primitives/p04-agent-step.md`](primitives/p04-agent-step.md), not repeated here.
+`P4 AgentStep` is this RA's central object. The eight elements every `AgentStep` MUST declare before it is fit to run in production (goal specification, input contract, output contract, tool scope, budget, termination conditions, identity and delegated authority, and observability contract) are specified in full in [`contracts/agent-step-boundary.md`](contracts/agent-step-boundary.md), including the reference structure diagrams showing where the enforcement points sit relative to the agent boundary. The BPMN ad-hoc sub-process precedent for hosting `P4` inside an existing standard, and the argument that four independently-built engines converged on the same shape, are covered in [`primitives/p04-agent-step.md`](primitives/p04-agent-step.md), not repeated here.
 
 ### Loop tiers
 
-An `AgentStep` that iterates does not run one undifferentiated loop. [`guidance/loop-tiers.md`](guidance/loop-tiers.md) names four nested cadences — from the model's own reasoning loop up to a product-ownership decision that lives outside any single execution — and states the normative rule that they MUST NOT share a budget or a termination condition. Read it alongside `P13 Budget` and `P19 EvaluationGate` above: the presence of a strong `P19` gate is what makes a large `P13` allocation safe at the innermost tier, and the same logic does not automatically extend to the tiers above it.
+An `AgentStep` that iterates does not run one undifferentiated loop. [`guidance/loop-tiers.md`](guidance/loop-tiers.md) names four nested cadences (from the model's own reasoning loop up to a product-ownership decision that lives outside any single execution) and states the normative rule that they MUST NOT share a budget or a termination condition. Read it alongside `P13 Budget` and `P19 EvaluationGate` above: the presence of a strong `P19` gate is what makes a large `P13` allocation safe at the innermost tier, and the same logic does not automatically extend to the tiers above it.
 
 ### Determinism hints, the checklist, and anti-patterns
 
@@ -67,16 +67,16 @@ Not every problem that looks agentic needs an `AgentStep`. [`guidance/determinis
 
 ### Boundaries with other working groups
 
-This RA defines interfaces other AAIF working groups' work plugs into; it does not perform their analysis. [`guidance/wg-boundaries.md`](guidance/wg-boundaries.md) is the canonical statement of what this RA emits to, and consumes from, the **Security & Privacy WG**, the **Observability & Traceability WG**, the **Governance, Risk & Regulatory Alignment WG**, the **Accuracy & Reliability WG**, and the **Identity & Trust WG** — merged with the equivalent section in [`ra-multi-agent.md`](ra-multi-agent.md) so neither document restates it separately.
+This RA defines interfaces other AAIF working groups' work plugs into; it does not perform their analysis. [`guidance/wg-boundaries.md`](guidance/wg-boundaries.md) is the canonical statement of what this RA emits to, and consumes from, the **Security & Privacy WG**, the **Observability & Traceability WG**, the **Governance, Risk & Regulatory Alignment WG**, the **Accuracy & Reliability WG**, and the **Identity & Trust WG**, merged with the equivalent section in [`ra-multi-agent.md`](ra-multi-agent.md) so neither document restates it separately.
 
 ## Open questions
 
 - Whether to define a conformance profile and test suite for this RA, or leave it descriptive.
 - How to represent `P13 Budget` portably, given no reviewed engine or framework (BPMN, n8n, Step Functions, Temporal, LangGraph) has a native equivalent.
 - Whether `P14`'s termination classifications should align to the A2A Protocol's task lifecycle states; cross-referencing the two is WG follow-up work, not resolved here.
-- How much of the `AgentStep` boundary contract can be expressed in BPMN `extensionElements` — as Camunda's `zeebe:adHoc` element does for activation configuration — versus requiring a new BPMN element altogether.
+- How much of the `AgentStep` boundary contract can be expressed in BPMN `extensionElements` (as Camunda's `zeebe:adHoc` element does for activation configuration) versus requiring a new BPMN element altogether.
 - Memory and context assembly: the least standardised layer across every framework surveyed. This RA does not attempt to specify it.
-- Whether the Tier 2 steering loop named in [`guidance/loop-tiers.md`](guidance/loop-tiers.md) needs a budget primitive of its own — today it has none, and re-running Tier 1 across repeated steering cycles has no declared ceiling at that scope.
+- Whether the Tier 2 steering loop named in [`guidance/loop-tiers.md`](guidance/loop-tiers.md) needs a budget primitive of its own. Today it has none, and re-running Tier 1 across repeated steering cycles has no declared ceiling at that scope.
 
 ## Notes
 

@@ -1,4 +1,4 @@
-# T6 Generator–critic / evaluator-optimizer
+# T6 Generator-critic / evaluator-optimizer
 
 **Primitives used:** [P13 Budget](../primitives/p13-budget.md) as a hard iteration cap, [P18 ArbitrationPolicy](../primitives/p18-arbitration-policy.md) as the deterministic stopping/acceptance rule, [P8 TimerDeadline](../primitives/p08-timer-deadline.md) per iteration.
 
@@ -18,9 +18,9 @@ flowchart LR
 
 ## When to choose it
 
-Choose T6 when iterative quality improvement is worth the extra cost and a deterministic stopping rule can be stated in advance. This is Anthropic's "evaluator-optimizer" workflow pattern (see [Anthropic — Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)).
+Choose T6 when iterative quality improvement is worth the extra cost and a deterministic stopping rule can be stated in advance. This is Anthropic's "evaluator-optimizer" workflow pattern (see [Anthropic: Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)).
 
-A generator-critic loop is the multi-agent form of the iteration loop described in [Loop tiers](../guidance/loop-tiers.md), and the critic is one way to implement a [P19 EvaluationGate](../primitives/p19-evaluation-gate.md) — a non-deterministic one, which is why the arbiter must be separate and deterministic.
+A generator-critic loop is the multi-agent form of the iteration loop described in [Loop tiers](../guidance/loop-tiers.md), and the critic is one way to implement a [P19 EvaluationGate](../primitives/p19-evaluation-gate.md), a non-deterministic one, which is why the arbiter must be separate and deterministic.
 
 ## When not to
 

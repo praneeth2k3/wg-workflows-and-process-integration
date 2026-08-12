@@ -15,7 +15,7 @@ flowchart LR
 
 ## When to choose it
 
-Choose T2 when the work is genuinely staged — each stage fully consumes the prior stage's output and does not need to revisit it — and when auditability matters more than flexibility. This is the cheapest multi-agent topology to build, reason about, and audit: there is no concurrency, no shared mutable state, and the [handoff contract](../contracts/handoff.md) gives a single well-defined seam per stage. It is comparable to a sequence of BPMN call activities connected by message flow, each stage bounded like a Camunda ad-hoc sub-process (see [OMG BPMN 2.0](https://www.omg.org/spec/BPMN/2.0/)).
+Choose T2 when the work is genuinely staged (each stage fully consumes the prior stage's output and does not need to revisit it) and when auditability matters more than flexibility. This is the cheapest multi-agent topology to build, reason about, and audit: there is no concurrency, no shared mutable state, and the [handoff contract](../contracts/handoff.md) gives a single well-defined seam per stage. It is comparable to a sequence of BPMN call activities connected by message flow, each stage bounded like a Camunda ad-hoc sub-process (see [OMG BPMN 2.0](https://www.omg.org/spec/BPMN/2.0/)).
 
 ## When not to
 

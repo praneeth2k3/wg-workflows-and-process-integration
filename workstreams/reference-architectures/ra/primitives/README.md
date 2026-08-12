@@ -1,6 +1,6 @@
 # Workflow Primitives
 
-This directory defines the primitive vocabulary shared by both reference architectures in this workstream: [`ra-single-agent.md`](../ra-single-agent.md) and [`ra-multi-agent.md`](../ra-multi-agent.md). A primitive is a named architectural role — a trigger, a bounded agent step, a budget ceiling, a termination classification — not an implementation. Primitive IDs are stable and shared across both RAs: neither document may redefine an ID that already exists here, and every new primitive gets the next unused number rather than reusing or renumbering an existing one. Each primitive's full treatment — its definition, the argument for why it exists, its nearest equivalents across the engines and frameworks this WG has surveyed, and its relationships to the rest of the set — lives in its own file, one per primitive, linked below.
+This directory defines the primitive vocabulary shared by both reference architectures in this workstream: [`ra-single-agent.md`](../ra-single-agent.md) and [`ra-multi-agent.md`](../ra-multi-agent.md). A primitive is a named architectural role (a trigger, a bounded agent step, a budget ceiling, a termination classification), not an implementation. Primitive IDs are stable and shared across both RAs: neither document may redefine an ID that already exists here, and every new primitive gets the next unused number rather than reusing or renumbering an existing one. Each primitive's full treatment (its definition, the argument for why it exists, its nearest equivalents across the engines and frameworks this WG has surveyed, and its relationships to the rest of the set) lives in its own file, one per primitive, linked below.
 
 ## The primitive set
 
@@ -34,7 +34,7 @@ This directory defines the primitive vocabulary shared by both reference archite
 
 ## Cross-mapping: P1–P15 and P19
 
-*Nearest equivalent, editorial judgment — not a conformance claim.* Cells marked "no native primitive" or "no direct equivalent" reflect this RA's argument that `P10`–`P14` (and now `P19`) are largely agentic-era additions rather than gaps in the survey. `P16`–`P18` are not repeated in this table because the source material does not give them a clean five-column mapping across all of BPMN 2.0, n8n, AWS Step Functions, Temporal, and LangGraph; each of those three primitives carries its own, partial prior-art table in its own file, with the absences noted as findings rather than papered over.
+*Nearest equivalent, editorial judgment, not a conformance claim.* Cells marked "no native primitive" or "no direct equivalent" reflect this RA's argument that `P10`–`P14` (and now `P19`) are largely agentic-era additions rather than gaps in the survey. `P16`–`P18` are not repeated in this table because the source material does not give them a clean five-column mapping across all of BPMN 2.0, n8n, AWS Step Functions, Temporal, and LangGraph; each of those three primitives carries its own, partial prior-art table in its own file, with the absences noted as findings rather than papered over.
 
 | Primitive | BPMN 2.0 | n8n | AWS Step Functions | Temporal | LangGraph |
 |-----------|----------|-----|---------------------|----------|-----------|
@@ -42,22 +42,22 @@ This directory defines the primitive vocabulary shared by both reference archite
 | P2 DeterministicTask | Service task / script task | Action node | Task state | Activity | Node |
 | P3 Decision | Gateway + business rule task (DMN) | IF / Switch node | Choice state | Ordinary code branch | Conditional edge |
 | P4 AgentStep | Ad-hoc sub-process, job-worker implementation | AI Agent node | Task invoking an agent runtime | Activity or child workflow | Subgraph / `create_react_agent` |
-| P5 ToolCall | Activity inside the ad-hoc sub-process | Sub-node attached to the AI Agent via a typed tool connection | No dedicated state — nested Task invoked by the agent runtime | Activity invoked from within the AgentStep's Activity/child workflow | Tool node |
+| P5 ToolCall | Activity inside the ad-hoc sub-process | Sub-node attached to the AI Agent via a typed tool connection | No dedicated state: nested Task invoked by the agent runtime | Activity invoked from within the AgentStep's Activity/child workflow | Tool node |
 | P6 HumanCheckpoint | User task + gateway | `sendAndWait` operation | `.waitForTaskToken` | Signal | `interrupt()` |
-| P7 FanOut/FanIn | Parallel gateway / multi-instance activity | No dedicated node — composed from batching + merge | Parallel and Map states | Composed from child workflows / futures | `Send` API |
-| P8 TimerDeadline | Timer boundary event | Wait node | Wait state / timeouts | Durable timer | No first-class primitive — composed around the graph |
+| P7 FanOut/FanIn | Parallel gateway / multi-instance activity | No dedicated node: composed from batching + merge | Parallel and Map states | Composed from child workflows / futures | `Send` API |
+| P8 TimerDeadline | Timer boundary event | Wait node | Wait state / timeouts | Durable timer | No first-class primitive: composed around the graph |
 | P9 ErrorBoundary | Error boundary event / event sub-process | Error-output connection on a node | Catch / Retry | Activity retry policy | Composed via graph-level exception handling |
-| P10 Escalation | Escalation event | No direct equivalent — compose HumanCheckpoint + ErrorBoundary | No direct equivalent — compose Catch + human-task integration | No direct equivalent — compose Signal + retry exhaustion | No direct equivalent — compose `interrupt()` on error |
-| P11 Compensation | Compensation handler | No equivalent — a real gap | No first-class primitive — compose Catch + compensating Task | Saga pattern | No equivalent — a real gap |
+| P10 Escalation | Escalation event | No direct equivalent: compose HumanCheckpoint + ErrorBoundary | No direct equivalent: compose Catch + human-task integration | No direct equivalent: compose Signal + retry exhaustion | No direct equivalent: compose `interrupt()` on error |
+| P11 Compensation | Compensation handler | No equivalent: a real gap | No first-class primitive: compose Catch + compensating Task | Saga pattern | No equivalent: a real gap |
 | P12 StateCommit | Engine-persisted process instance state (implementation-specific) | Execution data | Execution history | Event history | Checkpointer + thread |
-| P13 Budget | No native primitive — `completionCondition` is the closest mechanism | No native primitive | No native primitive | No native primitive | No native primitive |
-| P14 OutcomeContract | Process end events (success/error/terminate) — no policy/budget classification | Execution status — no policy/budget classification | Execution status — no policy/budget classification | Workflow completion status — no policy/budget classification | Graph termination state — no policy/budget classification |
+| P13 Budget | No native primitive: `completionCondition` is the closest mechanism | No native primitive | No native primitive | No native primitive | No native primitive |
+| P14 OutcomeContract | Process end events (success/error/terminate): no policy/budget classification | Execution status: no policy/budget classification | Execution status: no policy/budget classification | Workflow completion status: no policy/budget classification | Graph termination state: no policy/budget classification |
 | P15 AuditRecord | Engine execution log (implementation-specific) | Execution data (same mechanism as P12) | Execution history (same mechanism as P12) | Event history (same mechanism as P12) | Checkpointer history (same mechanism as P12) |
-| P19 EvaluationGate | `completionCondition` on an ad-hoc or multi-instance activity is the closest structural equivalent, though BPMN has no notion of the predicate being a test suite | No native equivalent — a workflow author wires validation nodes by hand | A `Choice` state can read a validation `Task`'s output — expressible but not first-class | Expressible as an activity whose result the workflow branches on | A conditional edge reading a validation node's output |
+| P19 EvaluationGate | `completionCondition` on an ad-hoc or multi-instance activity is the closest structural equivalent, though BPMN has no notion of the predicate being a test suite | No native equivalent: a workflow author wires validation nodes by hand | A `Choice` state can read a validation `Task`'s output, expressible but not first-class | Expressible as an activity whose result the workflow branches on | A conditional edge reading a validation node's output |
 
 ## Notes
 
 - All cross-mapping tables in this directory reflect editorial judgment, not a conformance claim.
-- Obligation levels (`MUST` / `SHOULD` / conditional `MUST`) are normative per RFC 2119 / BCP 14 and MUST NOT be changed without WG review — they are recorded once, in this table and in each primitive's own file, and are not repeated with different values anywhere else.
+- Obligation levels (`MUST` / `SHOULD` / conditional `MUST`) are normative per RFC 2119 / BCP 14 and MUST NOT be changed without WG review. They are recorded once, in this table and in each primitive's own file, and are not repeated with different values anywhere else.
 - The eight-element `AgentStep` boundary contract and the seven-element `Handoff` contract are specified in [`../contracts/agent-step-boundary.md`](../contracts/agent-step-boundary.md) and [`../contracts/handoff.md`](../contracts/handoff.md) respectively, not in this directory.
 - Loop-tier budget guidance referenced from `P13 Budget` and `P19 EvaluationGate` lives in [`../guidance/loop-tiers.md`](../guidance/loop-tiers.md).

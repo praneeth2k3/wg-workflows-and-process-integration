@@ -4,15 +4,15 @@ Applies to: [P4 AgentStep](../primitives/p04-agent-step.md)
 
 ## Purpose
 
-`P4 AgentStep` is the bounded, non-deterministic step inside an otherwise deterministic workflow: the workflow owns the process, and the agent is a bounded, contracted step inside it. This contract specifies that boundary — the interface between the deterministic workflow and the non-deterministic step, not the agent's own internal reasoning. Every `AgentStep` MUST declare the following eight elements before it is fit to run in production. Each is a required field on the contract, not an optional enhancement.
+`P4 AgentStep` is the bounded, non-deterministic step inside an otherwise deterministic workflow: the workflow owns the process, and the agent is a bounded, contracted step inside it. This contract specifies that boundary: the interface between the deterministic workflow and the non-deterministic step, not the agent's own internal reasoning. Every `AgentStep` MUST declare the following eight elements before it is fit to run in production. Each is a required field on the contract, not an optional enhancement.
 
 ## Required elements
 
 ### 1. Goal specification
 
-State what "done" looks like in the workflow's terms, not the model's. A goal expressed only as a natural-language prompt gives the orchestrator nothing to check against. The goal MUST be restated as a condition the workflow can evaluate independently of the model's own claim of completion — otherwise "success" is whatever the model asserts, which collapses `P14`'s termination classification back into an unverifiable self-report.
+State what "done" looks like in the workflow's terms, not the model's. A goal expressed only as a natural-language prompt gives the orchestrator nothing to check against. The goal MUST be restated as a condition the workflow can evaluate independently of the model's own claim of completion: otherwise "success" is whatever the model asserts, which collapses `P14`'s termination classification back into an unverifiable self-report.
 
-The goal specification MUST be a versioned, addressable artifact rather than an inline prompt string. It is revised across executions by the human steering loop described in [Loop tiers](../guidance/loop-tiers.md), and a goal that lives only inside a prompt cannot be diffed between runs. Without a diffable, addressable goal, there is no way to attribute a change in outcome to a change in the spec — the goal and the model's behaviour become inseparable, and the workflow loses the ability to reason about why one execution's result differs from the last.
+The goal specification MUST be a versioned, addressable artifact rather than an inline prompt string. It is revised across executions by the human steering loop described in [Loop tiers](../guidance/loop-tiers.md), and a goal that lives only inside a prompt cannot be diffed between runs. Without a diffable, addressable goal, there is no way to attribute a change in outcome to a change in the spec: the goal and the model's behaviour become inseparable, and the workflow loses the ability to reason about why one execution's result differs from the last.
 
 ### 2. Input contract
 
@@ -30,13 +30,13 @@ An allowlist, not a denylist, with each tool classified by effect: `read_only`, 
 
 ### 5. Budget
 
-The `P13` ceilings: max iterations, max tool calls, max tokens/cost, wall-clock deadline. Unbounded agent loops are the characteristic failure mode of agentic workflows, and the only reliable control is external — enforced by the orchestrator — not requested in the system prompt. A budget stated in the prompt is a suggestion the model MAY ignore under its own reasoning; a budget enforced by the orchestrator is a hard stop the model cannot reason its way past.
+The `P13` ceilings: max iterations, max tool calls, max tokens/cost, wall-clock deadline. Unbounded agent loops are the characteristic failure mode of agentic workflows, and the only reliable control is external (enforced by the orchestrator), not requested in the system prompt. A budget stated in the prompt is a suggestion the model MAY ignore under its own reasoning; a budget enforced by the orchestrator is a hard stop the model cannot reason its way past.
 
 ### 6. Termination conditions
 
-An explicit success predicate, failure predicate, and escalation predicate, each evaluated outside the model. "The model decides it's done" is not a termination condition — it is the model self-reporting against a goal it also authored, with no independent check. Termination conditions MUST be expressible as something the orchestrator, not the agent, evaluates.
+An explicit success predicate, failure predicate, and escalation predicate, each evaluated outside the model. "The model decides it's done" is not a termination condition. It is the model self-reporting against a goal it also authored, with no independent check. Termination conditions MUST be expressible as something the orchestrator, not the agent, evaluates.
 
-Where the step iterates, its success predicate SHOULD read a [P19 EvaluationGate](../primitives/p19-evaluation-gate.md) — a machine-checkable predicate the orchestrator can evaluate independently of the model. A termination condition with nothing to evaluate against degenerates into one of two things this contract already rejects: a fixed iteration count that bears no relationship to whether the work is actually done, or the model's own self-report of completion. An `EvaluationGate` gives the orchestrator a concrete, checkable answer to "has the success predicate been met" instead of a number chosen in advance or a claim taken on faith.
+Where the step iterates, its success predicate SHOULD read a [P19 EvaluationGate](../primitives/p19-evaluation-gate.md) (a machine-checkable predicate the orchestrator can evaluate independently of the model). A termination condition with nothing to evaluate against degenerates into one of two things this contract already rejects: a fixed iteration count that bears no relationship to whether the work is actually done, or the model's own self-report of completion. An `EvaluationGate` gives the orchestrator a concrete, checkable answer to "has the success predicate been met" instead of a number chosen in advance or a claim taken on faith.
 
 ### 7. Identity and delegated authority
 
@@ -44,11 +44,11 @@ Whose authority the agent acts under, and the scope of that delegation. This is 
 
 ### 8. Observability contract
 
-What the step MUST emit for the `P15 AuditRecord` to be reconstructable: step outcome, decision points crossed, tool invocations with their effect class, budget consumption against the ceiling, and any human intervention. This is workflow-level audit data, not a trace or a metric — see the Boundaries with other working groups section of [`ra-single-agent.md`](../ra-single-agent.md).
+What the step MUST emit for the `P15 AuditRecord` to be reconstructable: step outcome, decision points crossed, tool invocations with their effect class, budget consumption against the ceiling, and any human intervention. This is workflow-level audit data, not a trace or a metric: see the Boundaries with other working groups section of [`ra-single-agent.md`](../ra-single-agent.md).
 
 ## Reference structure
 
-The enforcement points are inside the `AgentStep` box, not around it: tool scope and budget are checked *before and during* execution, not audited after the fact. Everything downstream of `AgentStep` — the confidence-based `Decision`, `HumanCheckpoint`, `StateCommit`, `OutcomeContract` — is deterministic.
+The enforcement points are inside the `AgentStep` box, not around it: tool scope and budget are checked *before and during* execution, not audited after the fact. Everything downstream of `AgentStep` (the confidence-based `Decision`, `HumanCheckpoint`, `StateCommit`, `OutcomeContract`) is deterministic.
 
 ```mermaid
 flowchart TB

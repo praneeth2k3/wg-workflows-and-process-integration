@@ -27,6 +27,6 @@ Nearest equivalent is editorial judgment, not a conformance claim.
 
 ## Relationship to other primitives
 
-- [P2 DeterministicTask](p02-deterministic-task.md) — typically the first step after a trigger, doing deterministic pre-processing before any routing decision.
-- [P12 StateCommit](p12-state-commit.md) — the trigger establishes the point a workflow instance's durable state is keyed against.
-- [P15 AuditRecord](p15-audit-record.md) — the audit trail's first entry.
+- [P2 DeterministicTask](p02-deterministic-task.md): typically the first step after a trigger, doing deterministic pre-processing before any routing decision.
+- [P12 StateCommit](p12-state-commit.md): the trigger establishes the point a workflow instance's durable state is keyed against.
+- [P15 AuditRecord](p15-audit-record.md): the audit trail's first entry.

@@ -28,7 +28,7 @@ Use cases and scenarios validate the architectures; they are not separate refere
 
 ## Structure
 
-[`ra/`](ra/README.md) is normative — it is the reference architecture. [`docs/`](docs/README.md) is supporting analysis that informs the architecture without being it. `decisions/` records choices the WG needs to remember.
+[`ra/`](ra/README.md) is normative. It is the reference architecture. [`docs/`](docs/README.md) is supporting analysis that informs the architecture without being it. `decisions/` records choices the WG needs to remember.
 
 ```text
 workstreams/reference-architectures/

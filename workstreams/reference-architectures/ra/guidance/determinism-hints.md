@@ -17,7 +17,7 @@ General heuristic: **put the LLM where the input space is open and the output is
 
 ## Related
 
-- [Single-agent checklist](checklist-single-agent.md) — applies this table's logic to a specific use case, in order.
+- [Single-agent checklist](checklist-single-agent.md): applies this table's logic to a specific use case, in order.
 - [P2 DeterministicTask](../primitives/p02-deterministic-task.md)
 - [P3 Decision](../primitives/p03-decision.md)
 - [P4 AgentStep](../primitives/p04-agent-step.md)
